@@ -53,7 +53,7 @@ export const StudentsTable: React.FC = () => {
 
       return { previousAbsences };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       queryClient.setQueryData('absences', context?.previousAbsences);
     },
     onSettled: () => {
@@ -74,7 +74,7 @@ export const StudentsTable: React.FC = () => {
 
       return { previousAbsences };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       queryClient.setQueryData('absences', context?.previousAbsences);
     },
     onSettled: () => {
