@@ -1,0 +1,24 @@
+# Exclude build directories and dependencies
+build/
+dist/
+node_modules/
+
+# Exclude temporary setting files
+*.lock
+*.log
+
+# Exclude hidden files and directories
+.*.swp
+.DS_Store
+Thumbs.db
+
+# Exclude test files and coverage
+coverage/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# Exclude static resources
+public/
+static/
