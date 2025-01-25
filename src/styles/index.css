@@ -1,6 +1,12 @@
-:root {
-  background-color: #242424;
-  color: #ffffff;
+@import url('./variables.css');
+@import url('./reset.css');
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+  background-color: var(--body-background-color);
+  color: var(--background-root-color);
   font-family: 'Roboto', sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -9,34 +15,8 @@
   -webkit-text-size-adjust: 100%;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-a {
-  color: #000000;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  min-width: 320px;
-}
-
 #root {
   display: flex;
-  flex: 1 1 auto;
   flex-direction: column;
+  flex: 1 1 auto;
 }

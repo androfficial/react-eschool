@@ -4,7 +4,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { NotFoundPage } from '@/components/NotFoundPage';
 import { StudentDetails } from '@/components/StudentDetails';
 import { StudentsTable } from '@/components/StudentsTable';
-import { ToastProvider } from '@/config/toastConfig';
+import { ToastProvider } from '@/configs/toastConfig';
 import { CenteredLayout } from '@/layouts/CenteredLayout';
 
 export const App: React.FC = () => {

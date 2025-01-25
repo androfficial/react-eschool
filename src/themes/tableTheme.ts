@@ -5,20 +5,19 @@ export const tableTheme: Theme = createTheme({
     MuiTable: {
       styleOverrides: {
         root: {
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--background-root-color)',
         },
       },
     },
     MuiTableCell: {
       styleOverrides: {
         root: {
-          border: '2px solid #dcdfe4',
-          padding: '10px',
+          border: `2px solid var(--border-cell-color)`,
         },
         head: {
-          backgroundColor: '#f1f2f4',
-          color: '#000000',
-          fontWeight: '700',
+          backgroundColor: 'var(--background-head-color)',
+          color: 'var(--text-head-color)',
+          fontWeight: 700,
         },
       },
     },
