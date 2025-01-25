@@ -1,4 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, ThemeProvider } from '@mui/material';
+import React, { useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router';
 
@@ -40,8 +41,8 @@ export const StudentsTable: React.FC = () => {
       await queryClient.cancelQueries('absences');
       const previousAbsences = queryClient.getQueryData<IAbsenceModel[]>('absences');
 
-      queryClient.setQueryData<IAbsenceModel[]>('absences', (oldAbsences) => [
-        ...(oldAbsences || []),
+      queryClient.setQueryData<IAbsenceModel[]>('absences', (old) => [
+        ...(old || []),
         {
           Id: Math.random(),
           SchoolboyId: studentId,
@@ -51,7 +52,9 @@ export const StudentsTable: React.FC = () => {
         },
       ]);
 
-      return { previousAbsences };
+      return {
+        previousAbsences,
+      };
     },
     onError: (_err, _variables, context) => {
       queryClient.setQueryData('absences', context?.previousAbsences);
@@ -66,13 +69,15 @@ export const StudentsTable: React.FC = () => {
       await queryClient.cancelQueries('absences');
       const previousAbsences = queryClient.getQueryData<IAbsenceModel[]>('absences');
 
-      queryClient.setQueryData<IAbsenceModel[]>('absences', (oldAbsences) =>
-        (oldAbsences || []).filter(
+      queryClient.setQueryData<IAbsenceModel[]>('absences', (old) =>
+        (old || []).filter(
           (absence) => !(absence.SchoolboyId === studentId && absence.ColumnId === columnId)
         )
       );
 
-      return { previousAbsences };
+      return {
+        previousAbsences,
+      };
     },
     onError: (_err, _variables, context) => {
       queryClient.setQueryData('absences', context?.previousAbsences);
@@ -81,6 +86,22 @@ export const StudentsTable: React.FC = () => {
       queryClient.invalidateQueries('absences');
     },
   });
+
+  const handleAbsence = (studentId: number, columnId: number, isCurrentlyAbsent: boolean) => {
+    if (isCurrentlyAbsent) {
+      removeAbsenceMutation.mutate({ studentId, columnId });
+    } else {
+      addAbsenceMutation.mutate({ studentId, columnId });
+    }
+  };
+
+  const isAbsent = useMemo(
+    () => (studentId: number, columnId: number) =>
+      absences?.some(
+        (absence) => absence.SchoolboyId === studentId && absence.ColumnId === columnId
+      ) ?? false,
+    [absences]
+  );
 
   if (studentsLoading || columnsLoading || absencesLoading) {
     return <LoadingIndicator message="Таблиця студентів завантажується" />;
@@ -94,22 +115,6 @@ export const StudentsTable: React.FC = () => {
       />
     );
   }
-
-  const handleAbsence = (action: 'add' | 'remove', studentId: number, columnId: number) => {
-    if (action === 'add') {
-      addAbsenceMutation.mutate({ studentId, columnId });
-    } else if (action === 'remove') {
-      removeAbsenceMutation.mutate({ studentId, columnId });
-    }
-  };
-
-  const isAbsent = (studentId: number, columnId: number) => {
-    return (
-      absences?.some(
-        (absence) => absence.SchoolboyId === studentId && absence.ColumnId === columnId
-      ) ?? false
-    );
-  };
 
   return (
     <ThemeProvider theme={tableTheme}>
@@ -138,11 +143,7 @@ export const StudentsTable: React.FC = () => {
                 <TableCell
                   key={column.Id}
                   onClick={() =>
-                    handleAbsence(
-                      isAbsent(student.Id, column.Id) ? 'remove' : 'add',
-                      student.Id,
-                      column.Id
-                    )
+                    handleAbsence(student.Id, column.Id, isAbsent(student.Id, column.Id))
                   }
                   sx={{ cursor: 'pointer' }}
                 >
