@@ -1,11 +1,18 @@
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import { useCallback } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import { useLocation, useNavigate } from 'react-router';
 
-const ErrorFallback: React.FC<{ error: Error; resetErrorBoundary: () => void }> = ({
-  error,
-  resetErrorBoundary,
-}) => {
+interface IErrorFallbackProps {
+  error: Error;
+  resetErrorBoundary: () => void;
+}
+
+interface IErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+const ErrorFallback: React.FC<IErrorFallbackProps> = ({ error, resetErrorBoundary }) => {
   return (
     <Box
       sx={{
@@ -45,13 +52,13 @@ const ErrorFallback: React.FC<{ error: Error; resetErrorBoundary: () => void }> 
   );
 };
 
-export const ErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ErrorBoundary: React.FC<IErrorBoundaryProps> = ({ children }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const handleRetry = () => {
+  const handleRetry = useCallback(() => {
     navigate(pathname, { replace: true });
-  };
+  }, [navigate, pathname]);
 
   return (
     <ReactErrorBoundary FallbackComponent={ErrorFallback} onReset={handleRetry}>

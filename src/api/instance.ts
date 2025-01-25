@@ -1,6 +1,9 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { toast } from 'react-toastify';
 
+import { localStorageService } from '@/services/localStorageService';
+import { LocalStorageKeys } from '@/services/types';
+
 export const api: AxiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_CLASS_KEY}`,
   headers: {
@@ -10,8 +13,8 @@ export const api: AxiosInstance = axios.create({
 
 api.interceptors.request.use(
   (request: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('authToken');
-    const language = localStorage.getItem('language');
+    const token = localStorageService.getItem(LocalStorageKeys.AuthToken);
+    const language = localStorageService.getItem(LocalStorageKeys.Language);
 
     if (token) {
       request.headers.Authorization = `Bearer ${token}`;
@@ -46,6 +49,8 @@ api.interceptors.response.use(
           case 500:
             toast.error(`Внутрішня помилка сервера.\nБудь ласка, спробуйте пізніше.`);
             break;
+          default:
+            toast.error(`Сталася помилка. Код статусу: ${status}`);
         }
       } else {
         toast.error(`Немає відповіді від сервера.\nПеревірте з’єднання.`);
