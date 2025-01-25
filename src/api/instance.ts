@@ -50,7 +50,7 @@ api.interceptors.response.use(
             toast.error(`Внутрішня помилка сервера.\nБудь ласка, спробуйте пізніше.`);
             break;
           default:
-            toast.error(`Сталася помилка. Код статусу: ${status}`);
+            toast.error(`Сталася помилка.\nКод статусу: ${status}`);
         }
       } else {
         toast.error(`Немає відповіді від сервера.\nПеревірте з’єднання.`);
